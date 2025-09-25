@@ -1,0 +1,8 @@
+@import "tailwindcss";
+@reference "tailwindcss/utilities";
+
+@layer components {
+  .selected-sidebar {
+    @apply bg-emerald-400  text-white font-bold hover:rounded;
+  }
+}
