@@ -8,23 +8,6 @@ import api from "../api";
 import ShopHome from "./shop/Home";
 
 export default function Home() {
-  const [userData, setUserData] = useState({});
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const url = "api/getuser/";
-        const res = await api.get(url);
-        setUserData(res.data);
-      } catch (error) {}
-    }
-
-    if (localStorage.getItem("access")) {
-      fetchData();
-    }
-  }, []);
-
-  console.log(userData)
-
   const list = ["Create New", "Requests", "Previous Requests"];
   const [selected, setSelected] = useState(null);
   const listEl = list.map((el, i) => (
@@ -49,7 +32,7 @@ export default function Home() {
 
   return (
     <>
-      {userData.role === "USER" ? (
+      {localStorage.getItem("role") === "USER" ? (
         <main>
           <Header />
           <div className="flex">

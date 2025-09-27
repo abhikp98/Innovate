@@ -47,19 +47,12 @@ class VerifyOtpView(APIView):
             context = {
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
-                'message': 'OTP verified successfully'
+                'message': 'OTP verified successfully',
+                'role': user.role
             }
-            print(context)
             return Response(context, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "Invalid phone number or OTP"}, status=status.HTTP_400_BAD_REQUEST)
-
-class PrivateView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        user = request.user
-        return Response({"message": f"This is a private view accessible only to authenticated users.{user}"}, status=status.HTTP_200_OK)
     
 
 class LogoutView(APIView):
@@ -72,9 +65,3 @@ class LogoutView(APIView):
         token = RefreshToken(refresh_token)
         token.blacklist()
         return Response({"message": "Logged out successfully"}, status=status.HTTP_205_RESET_CONTENT)
-
-
-class GetUser(APIView):
-    def get(self, request, *args, **kwargs):
-        user = User.objects.get(id=self.request.user.id)
-        return Response({"message": "success", "role": user.role})
