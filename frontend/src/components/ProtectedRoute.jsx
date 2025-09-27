@@ -39,7 +39,7 @@ function ProtectedRoute({ children }) {
     tokenExpiration < now ? await refreshToken() : setISAuthorized(true);
   };
   if (isAuthorized == null) {
-    return <div>Loading...</div>;
+    return <div>Wait</div>;
   }
   return isAuthorized ? children : <Navigate to="login/" />;
 }
