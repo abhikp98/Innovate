@@ -1,3 +1,4 @@
+from webbrowser import get
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class SendOtpView(APIView):
     def post(self, request, *args, **kwargs):
+        print("Came here")
         print(request.data)
         phone_number = request.data.get('phone')
         print(phone_number, "phonenumber is")
@@ -70,3 +72,9 @@ class LogoutView(APIView):
         token = RefreshToken(refresh_token)
         token.blacklist()
         return Response({"message": "Logged out successfully"}, status=status.HTTP_205_RESET_CONTENT)
+
+
+class GetUser(APIView):
+    def get(self, request, *args, **kwargs):
+        user = User.objects.get(id=self.request.user.id)
+        return Response({"message": "success", "role": user.role})
