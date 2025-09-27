@@ -3,28 +3,27 @@ import SideBar from "../components/SideBar";
 import ContentBar from "../components/ContentBar";
 import NewRequest from "../components/NewRequest";
 import Requests from "../components/Requests";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../api";
-import ShopHome from "./shop/Home"
+import ShopHome from "./shop/Home";
 
 export default function Home() {
-
-  const [userData, setUserData] = useState({})
-  async function fetchData() {
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    async function fetchData() {
       try {
-        const url = "api/getuser/"
+        const url = "api/getuser/";
         const res = await api.get(url);
         setUserData(res.data);
-        
-        
-      } catch (error) {
-        
-      }
+      } catch (error) {}
     }
-    if (localStorage.getItem("access")){
+
+    if (localStorage.getItem("access")) {
       fetchData();
     }
-  
+  }, []);
+
+  console.log(userData)
 
   const list = ["Create New", "Requests", "Previous Requests"];
   const [selected, setSelected] = useState(null);
@@ -49,21 +48,42 @@ export default function Home() {
   }
 
   return (
-    {userData.role === "user"?(
-      <main>
-      <Header />
-      <div className="flex">
-        <div className="w-50">
-          <SideBar list={listEl} />
-        </div>
-        <div className="w-full">
-          {selected === null ? <DefaultDesign /> : <ContentBar data={data} />}
-        </div>
-      </div>
-    </main>
-
-    ): <ShopHome/>}
-    
+    <>
+      {userData.role === "USER" ? (
+        <main>
+          <Header />
+          <div className="flex">
+            <div className="w-50">
+              <SideBar list={listEl} />
+            </div>
+            <div className="w-full">
+              {selected === null ? (
+                <DefaultDesign />
+              ) : (
+                <ContentBar data={data} />
+              )}
+            </div>
+          </div>
+        </main>
+      ) : (
+        <ShopHome />
+        // <main>
+        //   <Header />
+        //   <div className="flex">
+        //     <div className="w-50">
+        //       <SideBar list={listEl} />
+        //     </div>
+        //     <div className="w-full">
+        //       {selected === null ? (
+        //         <DefaultDesign />
+        //       ) : (
+        //         <ContentBar data={data} />
+        //       )}
+        //     </div>
+        //   </div>
+        // </main>
+      )}
+    </>
   );
 }
 function DefaultDesign() {
